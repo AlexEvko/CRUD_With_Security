@@ -25,7 +25,7 @@ public class AdminController {
 
     @GetMapping
     public String getUsers(ModelMap modelMap) {
-        modelMap.addAttribute("users", userService.getAll());
+        modelMap.addAttribute("users", userService.findAll());
         return "admin-page";
     }
 
@@ -33,17 +33,17 @@ public class AdminController {
     public String saveUser(@ModelAttribute("user") User user,
                            @RequestParam(value = "role", required = false) String[] roles) {
         setRolesToUser(user, roles);
-        userService.saveUser(user);
+        userService.save(user);
         return "redirect:/admin";
     }
 
     @GetMapping("/create")
     public String create(@ModelAttribute("user") User user, ModelMap model) {
-        model.addAttribute("all_roles", roleService.getAll());
+        model.addAttribute("all_roles", roleService.findAll());
         return "create";
     }
 
-    @PatchMapping("/edit/{id}")
+    @PostMapping("/edit/{id}")
     public String update(@ModelAttribute("user") User user,
                          @RequestParam(value = "role", required = false) String[] roles) {
         setRolesToUser(user, roles);
@@ -56,7 +56,7 @@ public class AdminController {
         Set<Role> roleSet = new HashSet<>();
         if (roles != null) {
             for (String roleName : roles) {
-                roleSet.add(roleService.getByName(roleName));
+                roleSet.add(roleService.findByName(roleName));
             }
         }
         user.setRoles(roleSet);
@@ -64,18 +64,18 @@ public class AdminController {
 
     @GetMapping("/{id}")
     public String getUser(@PathVariable("id") Long id, ModelMap model) {
-        model.addAttribute("user", userService.getById(id));
+        model.addAttribute("user", userService.findById(id));
         return "user";
     }
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap model) {
-        model.addAttribute("user", userService.getById(id));
-        model.addAttribute("all_roles", roleService.getAll());
+        model.addAttribute("user", userService.findById(id));
+        model.addAttribute("all_roles", roleService.findAll());
         return "edit";
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable("id") Long id) {
         userService.deleteById(id);
         return "redirect:/admin";

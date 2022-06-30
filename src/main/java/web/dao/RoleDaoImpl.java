@@ -8,22 +8,10 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
-public class RoleDaoImpl implements RoleDao{
+public class RoleDaoImpl implements RoleDao {
 
     @PersistenceContext
     EntityManager entityManager;
-
-    @Override
-    public Role getByName(String name) {
-        return entityManager.createQuery("SELECT role FROM Role role WHERE role.name = : role", Role.class)
-                .setParameter("role", name)
-                .getSingleResult();
-    }
-
-    @Override
-    public List<Role> getAll() {
-        return entityManager.createQuery("SELECT roles FROM Role roles", Role.class).getResultList();
-    }
 
     @Override
     public void save(Role role) {
@@ -31,8 +19,20 @@ public class RoleDaoImpl implements RoleDao{
     }
 
     @Override
-    public Role getById(Long id) {
+    public Role findById(Long id) {
         return entityManager.find(Role.class, id);
+    }
+
+    @Override
+    public Role findByName(String name) {
+        return entityManager.createQuery("SELECT role FROM Role role WHERE role.name = : role", Role.class)
+                .setParameter("role", name)
+                .getSingleResult();
+    }
+
+    @Override
+    public List<Role> findAll() {
+        return entityManager.createQuery("SELECT roles FROM Role roles", Role.class).getResultList();
     }
 
     @Override

@@ -5,14 +5,13 @@ import web.model.Role;
 import java.util.List;
 
 public interface RoleDao {
-
-    public Role getByName(String name);
-
-    public List<Role> getAll();
-
     public void save(Role role);
 
-    public Role getById(Long id);
+    public Role findById(Long id);
+
+    public Role findByName(String name);
+
+    public List<Role> findAll();
 
     public void deleteById(Long id);
 

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User page</title>
+</head>
+<body>
+            <form th:method="post" th:action="@{/admin/create}" th:object="${user}">
+                <div class="mb-3">
+                    <label for="firstName" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="firstName" required th:field="*{username}"
+                           aria-describedby="nameHelp">
+
+                </div>
+                <div class="mb-3">
+                    <label for="lastName" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="lastName" required th:field="*{lastName}"
+                           aria-describedby="surNameHelp">
+
+                </div>
+                <div class="mb-3">
+                    <label for="age" class="form-label">Age</label>
+                    <input type="text" class="form-control" id="age" required th:field="*{age}"
+                           aria-describedby="ageHelp">
+
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="text" class="form-control" id="password" required th:field="*{password}"
+                           aria-describedby="passwordHelp">
+                    <
+                </div>
+                <div class="mb-3">
+                    <label for="role" class="form-control-label">Role</label>
+                    <select class="form-control" id="role" name="role" multiple="multiple">
+                        <option th:field="*{roles}" th:each="role : ${all_roles}"
+                                th:value="${role.name}"
+                                th:text="${role.name}">
+                        </option>
+                    </select>
+                </div>
+                <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
+                    <button type="submit" class="btn btn-primary">Create User</button>
+                    <button type="reset" class="btn btn-danger">Reset</button>
+                </div>
+            </form>
+</body>
+</html>

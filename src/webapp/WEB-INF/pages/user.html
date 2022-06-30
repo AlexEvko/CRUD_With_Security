@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,5 +9,12 @@
 <div>
     <p>Hello User, this Spring Security example</p>
 </div>
+
+
+<p th:text="'ID: ' + ${user.id}">User ID</p>
+<p th:text="'Name: ' + ${user.username}">Name</p>
+<p th:text="'Password: ' + ${user.password}">Password</p>
+<p th:text="'Roles: ' + ${user.roles}">Roles</p>
+
 </body>
 </html>

@@ -1,24 +1,56 @@
 package web.dao;
 
-import web.model.Role;
-import web.model.User;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import web.model.User;
 
-import java.util.Collections;
-import java.util.Map;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.List;
 
 @Repository
 public class UserDaoImpl implements UserDao {
-    private final Map<String, User> userMap = Collections.singletonMap("test",
-            new User(1L, "test", "test", Collections.singleton(new Role(1L, "ROLE_USER")))); // name - уникальное значение, выступает в качестве ключа Map
+
+    @PersistenceContext
+    EntityManager entityManager;
 
     @Override
-    public User getUserByName(String name) {
-        if (!userMap.containsKey(name)) {
-            return null;
-        }
+    @Transactional
+    public void save(User user) {
+        entityManager.persist(user);
+    }
 
-        return userMap.get(name);
+    @Override
+    @Transactional(readOnly = true)
+    public User findById(Long id) {
+        return entityManager.find(User.class, id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public User findByName(String name) {
+        return entityManager.createQuery("SELECT user FROM User user WHERE user.username = : name", User.class)
+                .setParameter("name", name)
+                .getSingleResult();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<User> findAll() {
+        return entityManager.createQuery("SELECT users FROM User users", User.class).getResultList();
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+        entityManager.createQuery("DELETE FROM User user WHERE user.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
+    }
+
+    @Override
+    @Transactional
+    public void update(User user) {
+        entityManager.merge(user);
     }
 }
-

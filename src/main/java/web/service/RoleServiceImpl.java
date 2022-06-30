@@ -1,11 +1,13 @@
 package web.service;
 
+import org.springframework.stereotype.Service;
 import web.dao.RoleDao;
 import web.model.Role;
 
 import java.util.List;
 
-public class RoleServiceImpl implements RoleService{
+@Service
+public class RoleServiceImpl implements RoleService {
 
     private final RoleDao roleDao;
 
@@ -14,23 +16,23 @@ public class RoleServiceImpl implements RoleService{
     }
 
     @Override
-    public Role getByName(String name) {
-        return roleDao.getByName(name);
-    }
-
-    @Override
-    public List<Role> getAll() {
-        return roleDao.getAll();
-    }
-
-    @Override
     public void save(Role role) {
         roleDao.save(role);
     }
 
     @Override
-    public Role getById(Long id) {
-        return roleDao.getById(id);
+    public Role findById(Long id) {
+        return roleDao.findById(id);
+    }
+
+    @Override
+    public Role findByName(String name) {
+        return roleDao.findByName(name);
+    }
+
+    @Override
+    public List<Role> findAll() {
+        return roleDao.findAll();
     }
 
     @Override
