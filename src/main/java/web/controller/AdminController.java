@@ -75,7 +75,7 @@ public class AdminController {
         return "edit";
     }
 
-    @DeleteMapping("/{id}")
+    @RequestMapping("/delete/{id}")
     public String deleteUser(@PathVariable("id") Long id) {
         userService.deleteById(id);
         return "redirect:/admin";
