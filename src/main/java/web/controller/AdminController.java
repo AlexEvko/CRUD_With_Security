@@ -1,6 +1,8 @@
 package web.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import web.model.Role;
@@ -10,6 +12,7 @@ import web.service.UserService;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -24,8 +27,9 @@ public class AdminController {
     }
 
     @GetMapping
-    public String getUsers(ModelMap modelMap) {
+    public String getUsers(@AuthenticationPrincipal User user, Model model,ModelMap modelMap) {
         modelMap.addAttribute("users", userService.findAll());
+        model.addAttribute("user", user);
         return "admin-page";
     }
 
@@ -79,5 +83,11 @@ public class AdminController {
     public String deleteUser(@PathVariable("id") Long id) {
         userService.deleteById(id);
         return "redirect:/admin";
+    }
+
+    private void getUserRoles(User user) {
+        user.setRoles(user.getRoles().stream()
+                .map(role -> roleService.findByName(role.getName()))
+                .collect(Collectors.toSet()));
     }
 }
