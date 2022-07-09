@@ -30,6 +30,7 @@ public class AdminController {
     public String getUsers(@AuthenticationPrincipal User user, Model model,ModelMap modelMap) {
         modelMap.addAttribute("users", userService.findAll());
         model.addAttribute("user", user);
+        model.addAttribute("roles", roleService.findAll());
         return "admin-page";
     }
 
@@ -47,6 +48,7 @@ public class AdminController {
         return "create";
     }
 
+
     @PostMapping("/edit/{id}")
     public String update(@ModelAttribute("user") User user,
                          @RequestParam(value = "role", required = false) String[] roles) {
@@ -54,7 +56,6 @@ public class AdminController {
         userService.update(user);
         return "redirect:/admin";
     }
-
     private void setRolesToUser(@ModelAttribute("user") User user,
                                 @RequestParam(value = "role", required = false) String[] roles) {
         Set<Role> roleSet = new HashSet<>();
@@ -66,21 +67,21 @@ public class AdminController {
         user.setRoles(roleSet);
     }
 
+//    @GetMapping("/create")
+//    public String create(@ModelAttribute("user") User user, ModelMap model) {
+//        model.addAttribute("all_roles", roleService.findAll());
+//        return "create";
+//    }
+
+
     @GetMapping("/{id}")
     public String getUser(@PathVariable("id") Long id, ModelMap model) {
         model.addAttribute("user", userService.findById(id));
         return "user";
     }
 
-    @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap model) {
-        model.addAttribute("user", userService.findById(id));
-        model.addAttribute("all_roles", roleService.findAll());
-        return "edit";
-    }
-
-    @RequestMapping("/delete/{id}")
-    public String deleteUser(@PathVariable("id") Long id) {
+    @PostMapping("/{id}/delete")
+    public String removeUser(@PathVariable("id") long id) {
         userService.deleteById(id);
         return "redirect:/admin";
     }
