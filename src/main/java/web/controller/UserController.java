@@ -7,13 +7,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import web.model.User;
 
+//@Controller
+//@RequestMapping("/user")
+//public class UserController {
+//
+//    @GetMapping
+//    public String userInfo(@AuthenticationPrincipal User user, Model model) {
+//        model.addAttribute("user", user);
+//        return "user";
+//    }
+//}
 @Controller
-@RequestMapping("/user")
 public class UserController {
 
-    @GetMapping
+    @GetMapping(value = "/user")
     public String userInfo(@AuthenticationPrincipal User user, Model model) {
         model.addAttribute("user", user);
-        return "user";
+        model.addAttribute("roles", user.getRoles());
+        return "user-page";
     }
 }
